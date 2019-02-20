@@ -1,0 +1,61 @@
+The Frame Table -- Array of frame structs, global data
+
+    struct *frame frameTable[TOTAL_FRAMES]; /* arrary of frames */
+    struct lock frame_table_lock; /* Global Struct Synchronization */
+
+    Total Size: 8 + 8 + 8 + 1 = 25 + 7 for alignment = 32
+    struct frame {
+        void *page; /* Page linked to Frame */
+        struct supple_page *supple_page; /* Supple Page link */
+        struct thread *thread; /* current thread that owns frame */
+        bool pinned; /* check if file is being used */
+     }
+
+    Populated: Happens during initialization of pintos. During the initial
+               process loop through palloc paging to populate the array with
+               all kpages. Shared across the pintos by all threads.
+
+    Accessed: During page faults: Loading initial pages, removing on evictions
+              and when the stack grows.
+
+    Destroyed: Destroyed when pintos terminates.
+
+Supplemental Page Table -- Hash Table of supple_page structs
+
+      <Added to the Thread Struct in thread.h>
+      struct hash supple_page;
+
+      <New struct in page.h>
+      Total Size: 8+16+4+4+1+1+1 = 35 + 5 for alignment = 40
+      struct supple_page {
+          void *page; /* Page tied to the supple_page */
+          struct hash_elem supple_page_elem; /* used for hash */
+          int frame_index; /* frame association */
+          int file offset; /* Reference to the location of file */
+          bool swapped; /* flag for swapped */
+          bool zero_page; /* flag for zero page */
+          bool read_only; /* flag for read only */
+       }
+
+      Populated: Initialized when the thread is created and exists per each.
+
+      Accessed:  Used during page faults. If in the table, then you will need
+                 load back, and if not decide whether the fault is exception
+                 or valid stack growth.
+
+      Destroyed: When a thread is terminated the table will be freed.
+
+The Swap Table - Global Structs declared in init.h
+
+        struct block block; /* block of disk swap space */
+        struct lock swap_lock; /* Synchronization for Global Data */
+        struct bitmap swap_table; /* Set of empty/used swap spaces */
+
+      Populated:  Created during the initialization of the Pintos OS, but lazily
+                  populated when required by eviction after frame table is full
+                  and after clock algorithm runs.
+
+      Accessed: During evictions and page faults the swap table is used to
+                either add to the table for evictions or remove on
+
+      Destroyed: When pintos terminates.

@@ -1,0 +1,25 @@
+PiLo hda1
+Loading.........
+Kernel command line: -q run 'args-multiple some arguments for'
+Pintos booting with 4,096 kB RAM...
+383 pages available in kernel pool.
+383 pages available in user pool.
+Calibrating timer...  204,600 loops/s.
+hda: 1,008 sectors (504 kB), model "BXHD00011", serial "Generic 1234"
+hda1: 147 sectors (73 kB), Pintos OS kernel (20)
+hdb: 5,040 sectors (2 MB), model "BXHD00012", serial "Generic 1234"
+hdb1: 4,096 sectors (2 MB), Pintos file system (21)
+filesys: using hdb1
+Boot complete.
+Executing 'args-multiple some arguments for':
+pointers in addr: 0xbffffffc
+pointers in addr: 0xbffffff2
+pointers in addr: 0xbfffffed
+pointers in addr: 0xbfffffdf
+bfffffb0                                      00 00 00 00 |            ....|
+bfffffc0  04 00 00 00 c4 ff ff bf-df ff ff bf ed ff ff bf |................|
+bfffffd0  f2 ff ff bf fc ff ff bf-00 00 00 00 00 00 00 61 |...............a|
+bfffffe0  72 67 73 2d 6d 75 6c 74-69 70 6c 65 00 73 6f 6d |rgs-multiple.som|
+bffffff0  65 00 61 72 67 75 6d 65-6e 74 73 00 66 6f 72 00 |e.arguments.for.|
+system call!
+
